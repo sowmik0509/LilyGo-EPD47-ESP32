@@ -47,6 +47,7 @@ void update(uint32_t delay_ms)
     //delay(delay_ms);
 }
 
+int lastPic = 0;
 void loop()
 {
 
@@ -54,7 +55,9 @@ void loop()
     int analogValue = analogRead(12);
     // Rescale to potentiometer's voltage (from 0V to 3.3V):
     float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
-    float picSelect = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+    float picSelect = int(floatMap(analogValue, 0, 4095, 1, 10));
+
+    if(picSelect != lastPic){
   
     // print out the value you read:
     Serial.print("Analog: ");
@@ -66,7 +69,7 @@ void loop()
     delay(1000);
 
 
-    if(picSelect == 1.0)
+    if((int)picSelect == 1.0)
     {
       Rect_t area = {
         .x = 0,
@@ -81,16 +84,9 @@ void loop()
       
       //delay(3000);
       
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
     
-    else if(picSelect == 2.0)
+    else if((int)picSelect == 2.0)
     {
       Rect_t area1 = {
           .x = 0,
@@ -102,16 +98,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 3.0)
+    else if((int)picSelect == 3.0)
     {
       Rect_t area2 = {
           .x = 0,
@@ -123,16 +112,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 4.0)
+    else if((int)picSelect == 4.0)
     {
       Rect_t area3 = {
           .x = 0,
@@ -143,17 +125,9 @@ void loop()
       epd_copy_to_framebuffer(area3, (uint8_t *) pic4_data, framebuffer);
   
       update(3000);
-
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 5.0)
+    else if((int)picSelect == 5.0)
     {
       Rect_t area4 = {
           .x = 0,
@@ -165,16 +139,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 6.0)
+    else if((int)picSelect == 6.0)
     {
       Rect_t area5 = {
           .x = 0,
@@ -186,16 +153,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 7.0)
+    else if((int)picSelect == 7.0)
     {
       Rect_t area6 = {
           .x = 0,
@@ -207,16 +167,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 8.0)
+    else if((int)picSelect == 8.0)
     {
       Rect_t area7 = {
           .x = 0,
@@ -227,17 +180,9 @@ void loop()
       epd_copy_to_framebuffer(area7, (uint8_t *) pic8_data, framebuffer);
   
       update(3000);
-
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 9.0)
+    else if((int)picSelect == 9.0)
     {
       Rect_t area8 = {
           .x = 0,
@@ -249,16 +194,9 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
 
-    else if(picSelect == 10.0)
+    else if((int)picSelect == 10.0)
     {
       Rect_t area9 = {
           .x = 0,
@@ -270,13 +208,8 @@ void loop()
   
       update(3000);
 
-      while(true)
-      {
-        int analogValueTmp = analogRead(12);
-        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
-        if(picSelect != picSelectTmp)
-          break;
-      }
     }
+    }
+    lastPic = picSelect;
         
 }
