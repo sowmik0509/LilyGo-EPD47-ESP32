@@ -11,12 +11,12 @@
 #include "pic2.h"
 #include "pic3.h"
 #include "pic4.h"
-/*#include "pic5.h"
+#include "pic5.h"
 #include "pic6.h"
 #include "pic7.h"
 #include "pic8.h"
 #include "pic9.h"
-#include "pic10.h"*/
+#include "pic10.h"
 
 uint8_t *framebuffer;
 
@@ -31,6 +31,10 @@ void setup()
 
 }
 
+float floatMap(float x, float in_min, float in_max, float out_min, float out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 void update(uint32_t delay_ms)
 {
     epd_poweron();
@@ -40,110 +44,239 @@ void update(uint32_t delay_ms)
     volatile uint32_t t2 = millis();
     Serial.printf("EPD draw took %dms.\n", t2 - t1);
     epd_poweroff();
-    delay(delay_ms);
+    //delay(delay_ms);
 }
 
 void loop()
 {
-    Rect_t area = {
+
+    // read the input on analog pin GIOP36:
+    int analogValue = analogRead(12);
+    // Rescale to potentiometer's voltage (from 0V to 3.3V):
+    float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
+    float picSelect = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+  
+    // print out the value you read:
+    Serial.print("Analog: ");
+    Serial.print(analogValue);
+    Serial.print(", Voltage: ");
+    Serial.println(voltage);
+    Serial.print(", Pic Select: ");
+    Serial.println(picSelect);
+    delay(1000);
+
+
+    if(picSelect == 1.0)
+    {
+      Rect_t area = {
         .x = 0,
         .y = 0,
         .width = pic1_width,
         .height =  pic1_height
-    };
-    epd_poweron();
-    epd_clear();
-    epd_draw_grayscale_image(area, (uint8_t *) pic1_data);
-    epd_poweroff();
-    delay(3000);
+      };
+      epd_poweron();
+      epd_clear();
+      epd_draw_grayscale_image(area, (uint8_t *) pic1_data);
+      epd_poweroff();
+      
+      //delay(3000);
+      
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
+    
+    else if(picSelect == 2.0)
+    {
+      Rect_t area1 = {
+          .x = 0,
+          .y = 0,
+          .width = pic2_width,
+          .height =  pic2_height
+      };
+      epd_copy_to_framebuffer(area1, (uint8_t *) pic2_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area1 = {
-        .x = 0,
-        .y = 0,
-        .width = pic2_width,
-        .height =  pic2_height
-    };
-    epd_copy_to_framebuffer(area1, (uint8_t *) pic2_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 3.0)
+    {
+      Rect_t area2 = {
+          .x = 0,
+          .y = 0,
+          .width = pic3_width,
+          .height =  pic3_height
+      };
+      epd_copy_to_framebuffer(area2, (uint8_t *) pic3_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area2 = {
-        .x = 0,
-        .y = 0,
-        .width = pic3_width,
-        .height =  pic3_height
-    };
-    epd_copy_to_framebuffer(area2, (uint8_t *) pic3_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 4.0)
+    {
+      Rect_t area3 = {
+          .x = 0,
+          .y = 0,
+          .width = pic4_width,
+          .height =  pic4_height
+      };
+      epd_copy_to_framebuffer(area3, (uint8_t *) pic4_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area3 = {
-        .x = 0,
-        .y = 0,
-        .width = pic4_width,
-        .height =  pic4_height
-    };
-    epd_copy_to_framebuffer(area3, (uint8_t *) pic4_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 5.0)
+    {
+      Rect_t area4 = {
+          .x = 0,
+          .y = 0,
+          .width = pic5_width,
+          .height =  pic5_height
+      };
+      epd_copy_to_framebuffer(area4, (uint8_t *) pic5_data, framebuffer);
+  
+      update(3000);
 
-    /*Rect_t area4 = {
-        .x = 0,
-        .y = 0,
-        .width = pic5_width,
-        .height =  pic5_height
-    };
-    epd_copy_to_framebuffer(area4, (uint8_t *) pic5_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 6.0)
+    {
+      Rect_t area5 = {
+          .x = 0,
+          .y = 0,
+          .width = pic6_width,
+          .height =  pic6_height
+      };
+      epd_copy_to_framebuffer(area5, (uint8_t *) pic6_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area5 = {
-        .x = 0,
-        .y = 0,
-        .width = pic6_width,
-        .height =  pic6_height
-    };
-    epd_copy_to_framebuffer(area5, (uint8_t *) pic6_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 7.0)
+    {
+      Rect_t area6 = {
+          .x = 0,
+          .y = 0,
+          .width = pic7_width,
+          .height =  pic7_height
+      };
+      epd_copy_to_framebuffer(area6, (uint8_t *) pic7_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area6 = {
-        .x = 0,
-        .y = 0,
-        .width = pic7_width,
-        .height =  pic7_height
-    };
-    epd_copy_to_framebuffer(area6, (uint8_t *) pic7_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 8.0)
+    {
+      Rect_t area7 = {
+          .x = 0,
+          .y = 0,
+          .width = pic8_width,
+          .height =  pic8_height
+      };
+      epd_copy_to_framebuffer(area7, (uint8_t *) pic8_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area7 = {
-        .x = 0,
-        .y = 0,
-        .width = pic8_width,
-        .height =  pic8_height
-    };
-    epd_copy_to_framebuffer(area7, (uint8_t *) pic8_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 9.0)
+    {
+      Rect_t area8 = {
+          .x = 0,
+          .y = 0,
+          .width = pic9_width,
+          .height =  pic9_height
+      };
+      epd_copy_to_framebuffer(area8, (uint8_t *) pic9_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area8 = {
-        .x = 0,
-        .y = 0,
-        .width = pic9_width,
-        .height =  pic9_height
-    };
-    epd_copy_to_framebuffer(area8, (uint8_t *) pic9_data, framebuffer);
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
 
-    update(3000);
+    else if(picSelect == 10.0)
+    {
+      Rect_t area9 = {
+          .x = 0,
+          .y = 0,
+          .width = pic10_width,
+          .height =  pic10_height
+      };
+      epd_copy_to_framebuffer(area9, (uint8_t *) pic10_data, framebuffer);
+  
+      update(3000);
 
-    Rect_t area9 = {
-        .x = 0,
-        .y = 0,
-        .width = pic10_width,
-        .height =  pic10_height
-    };
-    epd_copy_to_framebuffer(area9, (uint8_t *) pic10_data, framebuffer);
-
-    update(3000);*/
+      while(true)
+      {
+        int analogValueTmp = analogRead(12);
+        float picSelectTmp = floatMap(analogValue, 0, 4095, 1.0, 10.0);
+        if(picSelect != picSelectTmp)
+          break;
+      }
+    }
+        
 }
